@@ -24,19 +24,19 @@
 #COPY ./app /app
 #ENV PYTHONPATH=/app
 
-FROM python:3.9-slim
+FROM python:3.6
 
 LABEL maintainer="Sebastian Ramirez <tiangolo@gmail.com>"
 
 COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+RUN pip install --no-cache-dir -i https://pypi.douban.com/simple/ -r /tmp/requirements.txt
 
-COPY ./bin/start.sh /start.sh
+COPY ./app/bin/start.sh /start.sh
 RUN chmod +x /start.sh
 
-COPY ./bin/gunicorn_conf.py /gunicorn_conf.py
+COPY ./app/bin/gunicorn_conf.py /gunicorn_conf.py
 
-COPY ./bin/start-reload.sh /start-reload.sh
+COPY ./app/bin/start-reload.sh /start-reload.sh
 RUN chmod +x /start-reload.sh
 
 COPY ./app /app
