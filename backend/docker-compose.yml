@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  app-database:
+    image: postgres:9.6
+    container_name: app-database
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    # environment:
+    #   POSTGRES_USER: app
+    #   POSTGRES_PASSWORD: Passw0rd
+    #   POSTGRES_DB: app
+    #   POSTGRES_HOST_AUTH_METHOD: trust
+    networks:
+      - app-net
+    volumes:
+      - type: volume
+        source: app-data
+        target: /tmp/postgresql/data/pgdata
+
+  # demo-redis:
+  #   image: redis:6
+  #   container_name: redis
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - app-net
+
+networks:
+  app-net:
+    driver: bridge
+
+volumes:
+  app-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /tmp/postgresql/app-data
