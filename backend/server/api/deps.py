@@ -5,6 +5,8 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
+from db.session import SessionLocal
+
 
 # reusable_oauth2 = OAuth2PasswordBearer(
 #     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
@@ -12,9 +14,11 @@ from sqlalchemy.orm import Session
 
 
 def get_db() -> Generator:
+    db = SessionLocal()
     try:
-        db = SessionLocal()
         yield db
+    except Exception as e:
+        print("get_db except" + str(e))
     finally:
         db.close()
 
