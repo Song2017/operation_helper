@@ -19,7 +19,7 @@ create table "app_operation_info" (
     "name" varchar(100),
     "description" varchar(100),
     "content" varchar,
-    "is_consumed" boolean default true,
+    "is_consumed" boolean default false,
 
     "create_time" timestamp(3) with time zone default current_timestamp,
     "modify_time" timestamp(3) with time zone default current_timestamp,

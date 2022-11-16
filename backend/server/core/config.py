@@ -1,3 +1,4 @@
+import os
 import secrets
 from typing import Any, Dict, List, Optional, Union
 
@@ -16,12 +17,8 @@ class Settings(BaseSettings):
     PROJECT_NAME = "operation_helper"
     BACKEND_CORS_ORIGINS = ["http://localhost", "http://localhost:4200",
                             "http://localhost:3000", "http://localhost:8080",
-                            "https://localhost", "https://localhost:4200",
-                            "https://localhost:3000", "https://localhost:8080",
-                            "http://dev.operation.com",
-                            "https://stag.operation.com",
-                            "https://operation.com",
-                            "http://local.dockertoolbox.tiangolo.com",
+                            "http://39.97.239.252:9002",
                             "http://localhost.tiangolo.com"]
 
-    SQLALCHEMY_DATABASE_URI = "postgresql://user:admin123@localhost:5432/app"
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        "SQLALCHEMY_DATABASE_URI") or "postgresql://user:admin123@0.0.0.0:5432/app"

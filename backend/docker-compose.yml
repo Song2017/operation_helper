@@ -10,11 +10,31 @@ services:
       - .env
     networks:
       - app-net
-    volumes:
-      - app-data:/var/lib/postgresql/data/pgdata
-    environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
+    # volumes:
+    #   - app-data:/var/lib/postgresql/data/pgdata
+    # environment:
+    #   - PGDATA=/var/lib/postgresql/data/pgdata
 
+  backend:
+    image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
+    depends_on:
+      - app-database
+    env_file:
+      - .env
+    environment:
+      - SQLALCHEMY_DATABASE_URI=postgresql://user:admin123@192.168.65.0:5432/app
+      # - SERVER_HOST=https://${DOMAIN?Variable not set}
+      # Allow explicit env var override for tests
+      # - SMTP_HOST=${SMTP_HOST}
+    build:
+      context: ./server
+      dockerfile: backend.dockerfile
+    ports:
+      - "8000:80"
+    networks:
+      - app-net      
+      # args:
+      #   INSTALL_DEV: ${INSTALL_DEV-false}
   # demo-redis:
   #   image: redis:6
   #   container_name: redis
@@ -25,7 +45,7 @@ services:
 
 networks:
   app-net:
-    driver: bridge
+    driver: host
 
 volumes:
   app-data:

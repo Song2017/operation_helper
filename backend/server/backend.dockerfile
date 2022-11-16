@@ -1,20 +1,20 @@
-FROM python:3.6
+FROM python:3.9-slim
 
 LABEL maintainer="bensong2017@gmail.com"
 
 COPY requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -i https://pypi.douban.com/simple/ -r /tmp/requirements.txt
 
-COPY ./app/bin/start.sh /start.sh
+COPY ./bin/start.sh /start.sh
 RUN chmod +x /start.sh
 
-COPY ./app/bin/gunicorn_conf.py /gunicorn_conf.py
+COPY ./bin/gunicorn_conf.py /gunicorn_conf.py
 
-COPY ./app/bin/start-reload.sh /start-reload.sh
+COPY ./bin/start-reload.sh /start-reload.sh
 RUN chmod +x /start-reload.sh
 
-COPY ./app /app
-WORKDIR /app/
+COPY ./ /app
+WORKDIR /
 
 ENV PYTHONPATH=/app
 
