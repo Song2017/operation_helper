@@ -9,6 +9,6 @@
 2. run server 
    ```
    docker build -t songgs/operation-helper -f backend.dockerfile ./
-   docker run -it -p 9002:80 -e SQLALCHEMY_DATABASE_URI=postgresql://user:admin123@localhost:5432/app songgs/operation-helper
+   docker run -it -p 9003:80 -e SQLALCHEMY_DATABASE_URI=postgresql://user:admin123@172.17.0.1:9002/app songgs/operation-helper
    ```
 3. swagger UI: http://localhost:9002/api/docs
