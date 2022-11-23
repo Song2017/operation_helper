@@ -2,9 +2,11 @@ from typing import Any, List, Union
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+import models
 from api import deps
 from db.crud.base import CRUDBase
 from models.app_auth import AppAuthentication
+from models.app_user import AppUser
 from schemas.sms_authentication import SmsAuthCreate, SmsAuthPut
 
 router = APIRouter()
@@ -14,6 +16,7 @@ router = APIRouter()
 def create_auth(
         obj_in: SmsAuthCreate,
         db: Session = Depends(deps.get_db),
+        _: AppUser = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Test access token
@@ -26,6 +29,7 @@ def create_auth(
 def put_auth(
         obj_in: SmsAuthPut,
         db: Session = Depends(deps.get_db),
+        _: AppUser = Depends(deps.get_current_active_user),
 ) -> Any:
     """
     Test access token
@@ -46,6 +50,7 @@ def get_auth(
         page_no: int = 1,
         page_size: int = 10,
         db: Session = Depends(deps.get_db),
+        _: AppUser = Depends(deps.get_current_active_user),
 ) -> Any:
     auth = CRUDBase(AppAuthentication)
     condition_in = {"name": name, "is_enabled": is_enabled, "platform": platform}

@@ -1,6 +1,7 @@
 ## Backend server
 
 ### Guide
+change directory to ./backend/server
 1. replace db uri: core/config.py:SQLALCHEMY_DATABASE_URI
    ```
      docker volume create pgvolume

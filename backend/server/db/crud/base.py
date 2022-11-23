@@ -23,8 +23,8 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         self.model = model
 
-    def get(self, db: Session, id_in: Any) -> Optional[ModelType]:
-        return db.query(self.model).filter(self.model.id == id_in).first()
+    def get(self, db: Session, id_key: Any, id_val: Any) -> Optional[ModelType]:
+        return db.query(self.model).filter(getattr(self.model, id_key) == id_val).first()
 
     def get_multi(
             self, db: Session, page_no: int = 1, page_size: int = 10,
@@ -33,7 +33,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db_query = db.query(self.model)
         if condition_in:
             for db_field, field_val in condition_in.items():
-                db_query = db_query.filter(getattr(self.model, db_field) == field_val)
+                if field_val:
+                    db_query = db_query.filter(
+                        getattr(self.model, db_field) == field_val)
         if order_by:
             db_query.order_by(getattr(self.model, order_by))
         end = page_no * page_size
