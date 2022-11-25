@@ -15,6 +15,7 @@ class SmsAuthCreate(SmsAuthBase):
 
 
 class SmsAuthPut(SmsAuthCreate):
+    token: Optional[str]
     app_authentication_id: int
 
 

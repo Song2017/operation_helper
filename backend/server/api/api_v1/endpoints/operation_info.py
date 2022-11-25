@@ -51,5 +51,5 @@ def get_info(
     operation = CRUDBase(AppOperationInfo)
     condition_in = {"name": name, "is_consumed": is_consumed}
     info = operation.get_multi(db, page_no=page_no, page_size=page_size,
-                               condition_in=condition_in, order_by="name")
+                               condition_in=condition_in, order_by="app_operation_info_id")
     return info

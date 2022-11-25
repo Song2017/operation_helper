@@ -1,14 +1,18 @@
+import os
+
 from selenium import webdriver
 import time
 
 from selenium.webdriver.common.by import By
-
 from selenium.webdriver.chrome.options import Options
+import requests
+import json
 
 chrome_options = Options()
 # chrome_options.add_argument("--headless")
 # browser = webdriver.Chrome(executable_path=(r'..\chromedriver.exe'), options=chrome_options)
 browser = webdriver.Chrome(options=chrome_options)
+_url = os.getenv("server_host")
 
 
 # 登录微博
@@ -52,17 +56,54 @@ def build_cookies(cookies_in: list) -> str:
 
 
 def get_sms_code():
-    ...
+    headers = {
+        'accept': 'application/json',
+        'Authorization': f'Bearer {os.getenv("bear_token")}',
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.request("GET", _url + "?is_enabled=true", headers=headers)
+    resp_data = response.json()
+    print(resp_data)
+    payload = {
+        "type": "string",
+        "platform": "weibo",
+        "token": resp_data.get("token"),
+        "is_enabled": False
+    }
+    response = requests.request("PUT", _url, headers=headers, json=payload)
+    return resp_data.get("token")
 
 
-def save_cookies():
-    ...
+def get_content():
+    headers = {
+        'accept': 'application/json',
+        'Authorization': f'Bearer {os.getenv("bear_token")}',
+    }
+
+    response = requests.request("GET", _url + "?page_no=1&page_size=1&is_consumed=false", headers=headers)
+    resp_data: list = response.json()
+    print(resp_data)
+    content = ",".join([item.get("content") for item in resp_data])
+
+    return content
+
+
+def post_article(content_in: str):
+    if not content_in:
+        content_in = get_content()
+    browser.get('https://weibo.com')
+    browser.implicitly_wait(5)
+    browser.find_element(by=By.CSS_SELECTOR, value="textarea").send_keys(content_in)
+    browser.find_element(by=By.CSS_SELECTOR, value="button.woo-button-main").click()
 
 
 if __name__ == '__main__':
     print("begin login")
     # 设置用户名、密码
-    # username = '18765918310'
-    # password = "song18765918310"
-    # weibo_login(username, password)
+    username = os.getenv("weibo_user")
+    password = os.getenv("weibo_pass")
+    weibo_login(username, password)
     # build_cookies([])
+    # post article
+    post_article("")

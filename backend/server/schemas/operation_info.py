@@ -17,6 +17,7 @@ class OperationInfoCreate(OperationInfoBase):
 class OperationInfoPut(OperationInfoBase):
     app_operation_info_id: Optional[int]
     is_consumed: Optional[bool]
+    content: Optional[str]
 
 
 class OperationInfo(OperationInfoBase):

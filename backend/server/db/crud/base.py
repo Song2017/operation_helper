@@ -39,8 +39,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if order_by:
             db_query.order_by(getattr(self.model, order_by))
         end = page_no * page_size
-        db_query = db_query.offset(end - page_size).limit(end)
-
+        db_query = db_query.offset(end - page_size).limit(page_size)
         return db_query.all()
 
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
@@ -53,6 +52,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
     def query_update(self, db: Session, condition_in: dict, obj_in: CreateSchemaType) -> ModelType:
         obj_in_data: dict = jsonable_encoder(obj_in)
+        obj_in_data = {key: val for key, val in obj_in_data.items() if val is not None}
         db_qu = db.query(self.model)
         if condition_in:
             for db_field, field_val in condition_in.items():

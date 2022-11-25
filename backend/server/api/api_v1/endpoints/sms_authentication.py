@@ -56,5 +56,5 @@ def get_auth(
     condition_in = {"name": name, "is_enabled": is_enabled, "platform": platform}
     filter_condition = {k: v for k, v in condition_in.items() if v is not None}
     auths = auth.get_multi(db, page_no=page_no, page_size=page_size,
-                           condition_in=filter_condition, order_by="platform")
+                           condition_in=filter_condition, order_by="app_authentication_id")
     return auths
