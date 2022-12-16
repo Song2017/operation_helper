@@ -8,7 +8,7 @@ from selenium.webdriver.chrome.options import Options
 import requests
 
 chrome_options = Options()
-# chrome_options.add_argument("--headless")
+chrome_options.add_argument("--headless")
 # browser = webdriver.Chrome(executable_path=(r'..\chromedriver.exe'), options=chrome_options)
 browser = webdriver.Chrome(options=chrome_options)
 _url = os.getenv("server_host")
@@ -28,7 +28,7 @@ def weibo_login(username_in, password_in):
     browser.find_element(value="loginAction").click()
     time.sleep(1)
     browser.find_element(by=By.CLASS_NAME, value="m-btn").click()
-    time.sleep(10)
+    time.sleep(5)
 
     # get sms code
     name = input('sms code：')
